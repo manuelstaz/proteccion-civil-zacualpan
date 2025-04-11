@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Patronato Zacualpan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background-color: #002147;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+    .frase {
+      font-size: 1.5rem;
+      font-weight: bold;
+      animation: fade 3s infinite;
+    }
+    .color-amarillo { color: #f4c430; }
+    .color-blanco   { color: #ffffff; }
+    .color-verde    { color: #00cc66; }
+
+    @keyframes fade {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .botones {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+      background-color: #003366;
+    }
+    .botones button {
+      background-color: #f4c430;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .seccion {
+      display: none;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .activo {
+      display: block;
+    }
+    .error {
+      color: red;
+    }
+
+    input, select, textarea {
+      display: block;
+      margin: 0.5rem 0 1.5rem;
+      padding: 0.5rem;
+      width: 100%;
+      max-width: 500px;
+    }
+    button[type="submit"], .subir-comprobantes {
+      background-color: #002147;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Patronato Zacualpan Pro-equipamiento de Protección Civil</h1>
+    <div class="frase" id="fraseMotivadora"></div>
+    <h1>Nuestra jurisdicción de voluntarios abarca desde Playa Platanitos hasta Las Varas Nayarit... ¡GRACIAS!</h1>
+  </header>
+
+  <div class="botones">
+    <button onclick="mostrarSeccion('quienes')">¿QUIÉNES SOMOS?</button>
+    <button onclick="mostrarLogin()">MESA DIRECTIVA</button>
+    <button onclick="mostrarSeccion('donador')">HAZTE DONADOR</button>
+  </div>
+
+  <!-- QUIÉNES SOMOS -->
+  <section id="quienes" class="seccion">
+    <h2>¿Quiénes somos?</h2>
+    <p>Somos un grupo de voluntarios que decidimos unirnos a la causa de Protección Civil Zacualpan...</p>
+    <h2>Misión</h2>
+    <p>Unirnos en este patronato con el fin de recaudar fondos...</p>
+    <h2>Visión</h2>
+    <p>Miramos un Zacualpan unido ante la adversidad...</p>
+    <h2>Valores</h2>
+    <ul>
+      <li>Ética profesional</li>
+      <li>Empatía</li>
+      <li>Diversidad</li>
+      <li>Honestidad</li>
+      <li>Responsabilidad</li>
+    </ul>
+  </section>
+
+  <!-- LOGIN -->
+  <section id="loginMesa" class="seccion">
+    <h2>Acceso Mesa Directiva</h2>
+    <form id="formLogin" onsubmit="return validarLogin()">
+      <label>Rol:</label>
+      <select id="rol">
+        <option value="presidente">Presidente</option>
+        <option value="tesorera">Tesorera</option>
+        <option value="secretario">Secretario</option>
+        <option value="vocal1">Vocal 1</option>
+        <option value="vocal2">Vocal 2</option>
+      </select>
+
+      <label>Contraseña:</label>
+      <div style="position: relative; max-width: 400px;">
+        <input type="password" id="clave" placeholder="Ingresa tu contraseña" style="width: 100%; padding-right: 40px;">
+        <button type="button" onclick="togglePassword()" style="position: absolute; right: 0; top: 0; height: 100%; background: transparent; border: none; cursor: pointer;">👁️</button>
+      </div>
+
+      <button type="submit">Ingresar</button>
+      <p id="mensajeError" class="error"></p>
+    </form>
+  </section>
+
+  <!-- PANEL MESA DIRECTIVA -->
+  <section id="mesa" class="seccion">
+    <h2>Panel Privado Mesa Directiva</h2>
+    <div id="panelTesorera" style="display: none;">
+      <h3>Registro de Ingreso</h3>
+      <form id="formIngreso">
+        <label>Nombre del Donador:</label>
+        <input type="text" required />
+        <label>Cantidad ($):</label>
+        <input type="number" min="1" required />
+        <button type="submit">Registrar ingreso y generar recibo</button>
+      </form>
+
+      <hr />
+
+      <h3>Registro de Egreso</h3>
+      <form id="formEgreso" enctype="multipart/form-data">
+        <label>Concepto del egreso:</label>
+        <textarea required></textarea>
+        <label>Monto ($):</label>
+        <input type="number" min="1" required />
+        <label>Sube tus comprobantes (hasta 3 imágenes o PDFs):</label>
+        <input type="file" accept="image/*,application/pdf" multiple required />
+        <button type="submit" class="subir-comprobantes">Registrar egreso</button>
+      </form>
+    </div>
+    <div id="panelOtros" style="display: none;">
+      <p>Bienvenido. Puedes visualizar los reportes y movimientos generales.</p>
+    </div>
+  </section>
+
+  <!-- DONADOR -->
+  <section id="donador" class="seccion">
+    <h2>Hazte Donador</h2>
+    <p>Formulario de registro en construcción.</p>
+  </section>
+
+  <script>
+    const frases = [
+      { texto: "Tu apoyo equipa a nuestros héroes voluntarios", color: "color-amarillo" },
+      { texto: "Un pueblo unido es un pueblo fuerte", color: "color-blanco" },
+      { texto: "Cada peso cuenta para salvar vidas", color: "color-verde" }
+    ];
+    let fraseIndex = 0;
+    function actualizarFrase() {
+      const fraseEl = document.getElementById("fraseMotivadora");
+      fraseEl.textContent = frases[fraseIndex].texto;
+      fraseEl.className = "frase " + frases[fraseIndex].color;
+      fraseIndex = (fraseIndex + 1) % frases.length;
+    }
+    setInterval(actualizarFrase, 3000);
+    actualizarFrase();
+
+    function mostrarSeccion(id) {
+      document.querySelectorAll(".seccion").forEach(s => s.classList.remove("activo"));
+      document.getElementById(id).classList.add("activo");
+    }
+
+    function mostrarLogin() {
+      mostrarSeccion("loginMesa");
+    }
+
+    function togglePassword() {
+      const clave = document.getElementById("clave");
+      clave.type = clave.type === "password" ? "text" : "password";
+    }
+
+    const contraseñas = {
+      presidente: "zacualpan01",
+      tesorera: "zacualpan02",
+      secretario: "zacualpan03",
+      vocal1: "zacualpan04",
+      vocal2: "zacualpan05"
+    };
+
+    function validarLogin() {
+      const rol = document.getElementById("rol").value;
+      const clave = document.getElementById("clave").value;
+      const mensaje = document.getElementById("mensajeError");
+
+      if (contraseñas[rol] === clave) {
+        mostrarSeccion("mesa");
+        mensaje.textContent = "";
+
+        document.getElementById("panelTesorera").style.display = rol === "tesorera" ? "block" : "none";
+        document.getElementById("panelOtros").style.display = rol !== "tesorera" ? "block" : "none";
+      } else {
+        mensaje.textContent = "❌ Contraseña incorrecta.";
+      }
+      return false;
+    }
+  </script>
+</body>
+</html>
